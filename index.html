@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Sign-Up Validation</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Validation Colors */
+        input.valid {
+            border-color: #28a745; /* Green */
+            border-color: #28a745;
+            background-color: #f0fff4;
+        }
+
+        input.invalid {
+            border-color: #dc3545; /* Red */
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+
+        input:focus {
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .error-msg {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #2b7de9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #1a5bbf;
+        }
+
+        /* Footer for Group Members */
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #888;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .footer strong {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Complete Sign-Up</h2>
+    <form id="signupForm" novalidate>
+
+        <!-- Username -->
+        <div class="form-group">
+            <label for="username">Username (alphanumeric, 4-12 chars)</label>
+            <input type="text" id="username" placeholder="e.g. coder99" autocomplete="off">
+            <div class="error-msg" id="usernameError">Must be 4-12 characters and contain only letters and numbers.</div>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="form-group">
+            <label for="phone">Phone Number (10 digits)</label>
+            <!-- maxlength prevents overflow -->
+            <input type="text" id="phone" placeholder="e.g. 09123456789" maxlength="10" autocomplete="off">
+            <div class="error-msg" id="phoneError">Please enter a valid 10-digit phone number.</div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+            <label for="password">Password (min 8 chars, 1 letter & 1 number)</label>
+            <input type="password" id="password" placeholder="••••••••">
+            <div class="error-msg" id="passwordError">Requires at least 8 characters with at least 1 letter and 1 number.</div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="••••••••">
+            <div class="error-msg" id="confirmError">Passwords do not match.</div>
+        </div>
+
+        <button type="submit" id="submitBtn">Create Account</button>
+    </form>
+
+    <!-- Group Members Footer -->
+    <!-- Group Members -->
+    <div class="footer">
+        Group Members: <strong>Dael, Ferreras, Junatas, Patron, Pernia, Ubay </strong>
+    </div>
+</div>
+
+<script>
+    // Select elements
+    // Select Elements
+    const username = document.getElementById('username');
+    const phone = document.getElementById('phone');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const form = document.getElementById('signupForm');
+
+    // Select error message elements
+    const usernameError = document.getElementById('usernameError');
+    const phoneError = document.getElementById('phoneError');
+    const passwordError = document.getElementById('passwordError');
+    const confirmError = document.getElementById('confirmError');
+
+    // Helper function to update UI based on validation
+    function setValidation(inputElement, errorElement, isValid, errorMessage = "") {
+        if (isValid) {
+            inputElement.classList.remove('invalid');
+            inputElement.classList.add('valid');
+            errorElement.classList.remove('show');
+        } else {
+            inputElement.classList.remove('valid');
+            inputElement.classList.add('invalid');
+            errorElement.textContent = errorMessage;
+            errorElement.classList.add('show');
+        }
+    }
+
+    // 1. Validate Username: Alphanumeric, 4-12 chars
+    // Validate Username
+    function validateUsername() {
+        const value = username.value;
+        const regex = /^[a-zA-Z0-9]{4,12}$/;
+        const isValid = regex.test(value);
+        setValidation(username, usernameError, isValid, "Must be 4-12 characters and contain only letters and numbers.");
+        return isValid;
+    }
+
+    // 2. Validate Phone: 10 digits, number only
+    // Validate Phone
+    function validatePhone() {
+        const value = phone.value;
+        const regex = /^[0-9]{10}$/;
+        const isValid = regex.test(value);
+        setValidation(phone, phoneError, isValid, "Please enter a valid 10-digit phone number.");
+        return isValid;
+    }
+
+    // 3. Validate Password: min 8 chars, 1 letter, 1 number, accepts spaces
+    // Validate Password
+    function validatePassword() {
+        const value = password.value;
+        const hasMinLength = value.length >= 8;
+        const hasLetter = /[a-zA-Z]/.test(value);
+        const hasNumber = /[0-9]/.test(value);
+
+        const isValid = hasMinLength && hasLetter && hasNumber;
+        setValidation(password, passwordError, isValid, "Requires at least 8 characters with at least 1 letter and 1 number.");
+        return isValid;
+    }
+
+    // 4. Validate Confirm Password: must match password
+    // Validate Confirm Password
+    function validateConfirmPassword() {
+        const isValid = confirmPassword.value === password.value && confirmPassword.value !== "";
+        setValidation(confirmPassword, confirmError, isValid, "Passwords do not match.");
+        return isValid;
+    }
+
+    // Attach 'input' event listeners for real-time validation
+    // Event Listeners
+    username.addEventListener('input', validateUsername);
+    phone.addEventListener('input', validatePhone);
+    password.addEventListener('input', () => {
+        validatePassword();
+        // Re-validate confirm password if password changes
+        if (confirmPassword.value !== "") {
+            validateConfirmPassword();
+        }
+    });
+    confirmPassword.addEventListener('input', validateConfirmPassword);
+
+    // Handle Form Submission
+    // Form Submission
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent page reload
+        event.preventDefault();
+
+        // Run all validations
+        const isUsernameValid = validateUsername();
+        const isPhoneValid = validatePhone();
+        const isPasswordValid = validatePassword();
+        const isConfirmValid = validateConfirmPassword();
+
+        // Check if all are true
+        if (isUsernameValid && isPhoneValid && isPasswordValid && isConfirmValid) {
+            alert("Successfully sign up");
+            // Optionally reset the form here
+            // form.reset();
+            // document.querySelectorAll('input').forEach(input => input.classList.remove('valid', 'invalid'));
+        } else {
+            // Just highlight invalid boxes (already done by real-time validation)
+            // No alert needed as per instructions
+        }
+    });
+</script>
+
+</body>
+</html>
